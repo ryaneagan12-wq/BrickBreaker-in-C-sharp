@@ -31,6 +31,7 @@ namespace BB_Brick_Breaker
             int player2_height = 26;
             int player2_x = 60;
             int player2_y = 120;
+            int player2_speed = 20;
 
             int arrow_width = 149;
             int arrow_height = 103;
@@ -57,22 +58,38 @@ namespace BB_Brick_Breaker
 
 
             int score = 0;
+            int HIScore = 0;
+            int Lives = 3;
             bool game_over = false;
             bool fire = false;
 
 
-
-            while (!Raylib.WindowShouldClose()) //needs physics here
+            while (!Raylib.WindowShouldClose()) //needs moar physics here
             {
                 Raylib.BeginDrawing();
 
                 if (!game_over)
                 {
+                    if (Raylib.IsKeyDown(KeyboardKey.Left) || Raylib.IsKeyDown(KeyboardKey.A))
+                    {
+                        if (player2_x > 0)
+                        {
+                            player2_x -= player2_speed;
+                        }
+                    }
+                    if (Raylib.IsKeyDown(KeyboardKey.Right) || Raylib.IsKeyDown(KeyboardKey.D))
+                    {
+                        if (player2_y < 240 - player2_height)
+                        { 
+                            player2_x += player2_speed;
+                        }
+                    }
+
                     Vector2 mousePos = Raylib.GetMousePosition();
-
-
                 }
                 Raylib.DrawTexture(Background, 0, 0, Color.White);
+                Raylib.DrawTexture(Conveyor,player2_x,player2_y,Color.White);
+                Raylib.DrawTexture(steel_ball, player_x, player_y, Color.White);
 
                 Raylib.EndDrawing();
             }
