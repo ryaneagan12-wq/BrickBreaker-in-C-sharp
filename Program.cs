@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Numerics;
 using Raylib_cs;
 
 namespace BB_Brick_Breaker
@@ -20,19 +21,20 @@ namespace BB_Brick_Breaker
             Texture2D Red_Brick_50 = Raylib.LoadTexture("C:\\Users\\ryan\\OneDrive\\Documents\\C#\\Pinball Breaker!\\Asset files\\Red Brick (50%).png");
             Texture2D Red_Brick_25 = Raylib.LoadTexture("C:\\Users\\ryan\\OneDrive\\Documents\\C#\\Pinball Breaker!\\Asset files\\Red Brick (25%).png");
 
-            int player_width = 106;
-            int player_height = 26;
-            int player_x = 400;
+            int player_width = 14;
+            int player_height = 14;
+            int player_x = 60;
             int player_y = 100;
+            int player_speed = 20;
 
-            int player2_width = 14;
-            int player2_height = 14;
-            int player2_x = 400;
+            int player2_width = 106;
+            int player2_height = 26;
+            int player2_x = 60;
             int player2_y = 120;
 
             int arrow_width = 149;
             int arrow_height = 103;
-            int arrow_x = 400;
+            int arrow_x = 60;
             int arrow_y = 50;
 
             int enemy_width = 68;
@@ -54,14 +56,23 @@ namespace BB_Brick_Breaker
             Color Black = new Color(0, 0, 0);
 
 
-            //something here for  and physics maybe 
+            int score = 0;
+            bool game_over = false;
+            bool fire = false;
 
 
-            while (!Raylib.WindowShouldClose())
+
+            while (!Raylib.WindowShouldClose()) //needs physics here
             {
                 Raylib.BeginDrawing();
 
-                // something here about game rules maybe
+                if (!game_over)
+                {
+                    Vector2 mousePos = Raylib.GetMousePosition();
+
+
+                }
+                Raylib.DrawTexture(Background, 0, 0, Color.White);
 
                 Raylib.EndDrawing();
             }
