@@ -8,35 +8,36 @@ namespace BB_Brick_Breaker
     {
         static void Main(string[] args)
         {
-            Raylib.InitWindow(240, 260, "Blackberry Brick Breaker");
+            Raylib.InitWindow(1420, 1065, "Blackberry Brick Breaker");
             Raylib.SetTargetFPS(60);
-            Texture2D Background = Raylib.LoadTexture("C:\\Users\\ryan\\OneDrive\\Documents\\C#\\Pinball Breaker!\\Asset files\\Background.png");
-            Texture2D Conveyor = Raylib.LoadTexture("C:\\Users\\ryan\\OneDrive\\Documents\\C#\\Pinball Breaker!\\Asset files\\Conveyor.png");
-            Texture2D steel_ball = Raylib.LoadTexture("C:\\Users\\ryan\\OneDrive\\Documents\\C#\\Pinball Breaker!\\Asset files\\Steel Ball.png");
-            Texture2D Arrows = Raylib.LoadTexture("C:\\Users\\ryan\\OneDrive\\Documents\\C#\\Pinball Breaker!\\Asset files\\Arrows.png");
-            Texture2D line = Raylib.LoadTexture("C:\\Users\\ryan\\OneDrive\\Documents\\C#\\Pinball Breaker!\\Asset files\\line.png");
-            Texture2D Iron_Brick = Raylib.LoadTexture("C:\\Users\\ryan\\OneDrive\\Documents\\C#\\Pinball Breaker!\\Asset files\\Iron Brick.png");
-            Texture2D Red_Brick = Raylib.LoadTexture("C:\\Users\\ryan\\OneDrive\\Documents\\C#\\Pinball Breaker!\\Asset files\\Red Brick (100%).png");
-            Texture2D Red_Brick_75 = Raylib.LoadTexture("C:\\Users\\ryan\\OneDrive\\Documents\\C#\\Pinball Breaker!\\Asset files\\Red Brick (75%).png");
-            Texture2D Red_Brick_50 = Raylib.LoadTexture("C:\\Users\\ryan\\OneDrive\\Documents\\C#\\Pinball Breaker!\\Asset files\\Red Brick (50%).png");
-            Texture2D Red_Brick_25 = Raylib.LoadTexture("C:\\Users\\ryan\\OneDrive\\Documents\\C#\\Pinball Breaker!\\Asset files\\Red Brick (25%).png");
+            Texture2D Background = Raylib.LoadTexture("C:\\Users\\ryan\\OneDrive\\Documents\\C#\\Brick Breaker!\\Asset files\\Background2.png");
+            Texture2D Conveyor = Raylib.LoadTexture("C:\\Users\\ryan\\OneDrive\\Documents\\C#\\Brick Breaker!\\Asset files\\Conveyor.png");
+            Texture2D steel_ball = Raylib.LoadTexture("C:\\Users\\ryan\\OneDrive\\Documents\\C#\\Brick Breaker!\\Asset files\\Steel Ball.png");
+            Texture2D Arrows = Raylib.LoadTexture("C:\\Users\\ryan\\OneDrive\\Documents\\C#\\Brick Breaker!\\Asset files\\Arrows.png");
+            Texture2D line = Raylib.LoadTexture("C:\\Users\\ryan\\OneDrive\\Documents\\C#\\Brick Breaker!\\Asset files\\line.png");
+            Texture2D Iron_Brick = Raylib.LoadTexture("C:\\Users\\ryan\\OneDrive\\Documents\\C#\\Brick Breaker!\\Asset files\\Iron Brick.png");
+            Texture2D Red_Brick = Raylib.LoadTexture("C:\\Users\\ryan\\OneDrive\\Documents\\C#\\Brick Breaker!\\Asset files\\Red Brick (100%).png");
+            Texture2D Red_Brick_75 = Raylib.LoadTexture("C:\\Users\\ryan\\OneDrive\\Documents\\C#\\Brick Breaker!\\Asset files\\Red Brick (75%).png");
+            Texture2D Red_Brick_50 = Raylib.LoadTexture("C:\\Users\\ryan\\OneDrive\\Documents\\C#\\Brick Breaker!\\Asset files\\Red Brick (50%).png");
+            Texture2D Red_Brick_25 = Raylib.LoadTexture("C:\\Users\\ryan\\OneDrive\\Documents\\C#\\Brick Breaker!\\Asset files\\Red Brick (25%).png");
 
             int player_width = 14;
             int player_height = 14;
-            int player_x = 60;
-            int player_y = 100;
+            float player_x = 540.0f;
+            float player_y = 915.0f;
             int player_speed = 20;
 
             int player2_width = 106;
             int player2_height = 26;
-            int player2_x = 60;
-            int player2_y = 120;
+            int player2_x = 495;
+            int player2_y = 930;
             int player2_speed = 20;
 
             int arrow_width = 149;
             int arrow_height = 103;
-            int arrow_x = 60;
-            int arrow_y = 50;
+            int arrow_x = 475;
+            int arrow_y = 960;
+            int arrow_speed = 20;
 
             int enemy_width = 68;
             int enemy_height = 33;
@@ -54,12 +55,21 @@ namespace BB_Brick_Breaker
             int ironenemy_height = 34;
 
 
+            float wall_width = 896.0f;
+            float wall_height = 950.0f;
+            float wall_x = 70.0f;
+            float wall_y = 130.0f;
+            Rectangle wall = new Rectangle(wall_x, wall_y, wall_width, wall_height);
+
+
             Color Black = new Color(0, 0, 0);
 
 
             int score = 0;
             int HIScore = 0;
             int Lives = 3;
+            float ball_dx = 3.0f;
+            float ball_dy = 3.0f;
             bool game_over = false;
             bool fire = false;
 
@@ -67,30 +77,62 @@ namespace BB_Brick_Breaker
             while (!Raylib.WindowShouldClose()) //needs moar physics here
             {
                 Raylib.BeginDrawing();
+                Raylib.ClearBackground(Color.Gray);
 
                 if (!game_over)
                 {
                     if (Raylib.IsKeyDown(KeyboardKey.Left) || Raylib.IsKeyDown(KeyboardKey.A))
                     {
-                        if (player2_x > 0)
+                        if (player2_x < 900 - arrow_width && arrow_x < 900 - arrow_width) //problem here on the x movement (still figuring out how the heck)
                         {
                             player2_x -= player2_speed;
+                            arrow_x -= arrow_speed;
                         }
                     }
                     if (Raylib.IsKeyDown(KeyboardKey.Right) || Raylib.IsKeyDown(KeyboardKey.D))
                     {
-                        if (player2_y < 240 - player2_height)
-                        { 
+                        if (player2_x < 950 - player2_width && arrow_x < 950 - arrow_width)
+                        {
                             player2_x += player2_speed;
+                            arrow_x += arrow_speed;
                         }
                     }
 
-                    Vector2 mousePos = Raylib.GetMousePosition();
+
+                    if (fire)
+                    {
+                        player_x += ball_dx;
+                        player_y += ball_dy;
+                    }
+
+                    else
+                    {
+                        Vector2 mousePos = Raylib.GetMousePosition();
+                        if (Raylib.IsKeyPressed(KeyboardKey.F))
+                        {
+                            fire = true; 
+                        }
+                    }
                 }
                 Raylib.DrawTexture(Background, 0, 0, Color.White);
-                Raylib.DrawTexture(Conveyor,player2_x,player2_y,Color.White);
-                Raylib.DrawTexture(steel_ball, player_x, player_y, Color.White);
+                Raylib.DrawTexture(Conveyor, player2_x, player2_y, Color.White);
+                Raylib.DrawTexture(steel_ball, Convert.ToInt32(player_x), Convert.ToInt32(player_y), Color.White);
+                Raylib.DrawTexture(Arrows, arrow_x, arrow_y, Color.White);
 
+
+
+                if (Raylib.IsMouseButtonPressed(MouseButton.Left)) 
+                { 
+                    Console.WriteLine(Raylib.GetMouseX() + ", " + Raylib.GetMouseY()); 
+                }
+
+
+                if (!game_over)
+                {
+                    Raylib.DrawText($"{score:F0}", 1230, 250, 100, Color.White);
+                    Raylib.DrawText($"{Lives:F0}", 1230, 710, 100, Color.White);
+                    Raylib.DrawText($"{HIScore:F0}", 1230, 940, 100, Color.White);
+                }
                 Raylib.EndDrawing();
             }
         }
