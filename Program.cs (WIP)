@@ -83,20 +83,34 @@ namespace BB_Brick_Breaker
                 {
                     if (Raylib.IsKeyDown(KeyboardKey.Left) || Raylib.IsKeyDown(KeyboardKey.A))
                     {
-                        if (player2_x < 900 - arrow_width && arrow_x < 900 - arrow_width) //problem here on the x movement (still figuring out how the heck)
+
+                        if (arrow_x - arrow_speed >= wall_x)
                         {
                             player2_x -= player2_speed;
                             arrow_x -= arrow_speed;
                         }
+                        else
+                        {
+                            player2_x -= Convert.ToInt32(arrow_x - wall_x);
+                            arrow_x -= Convert.ToInt32(arrow_x - wall_x);
+                        }
+                        
                     }
                     if (Raylib.IsKeyDown(KeyboardKey.Right) || Raylib.IsKeyDown(KeyboardKey.D))
                     {
-                        if (player2_x < 950 - player2_width && arrow_x < 950 - arrow_width)
+                        if (arrow_x + arrow_width + arrow_speed <= 966)
                         {
                             player2_x += player2_speed;
                             arrow_x += arrow_speed;
                         }
+                        else
+                        {
+                            player2_x += Convert.ToInt32(966 - arrow_x - arrow_width);
+                            arrow_x += Convert.ToInt32(966 - arrow_x - arrow_width);
+                        }
                     }
+
+                    Console.WriteLine(arrow_x + " | " + (arrow_x + arrow_width));
 
 
                     if (fire)
