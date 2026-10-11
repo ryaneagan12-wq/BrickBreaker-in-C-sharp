@@ -116,22 +116,22 @@ namespace BB_Brick_Breaker
                         player_x -= ball_dx;
                         player_y -= ball_dy;
 
-                        if ((player_x - ball_dx <= wall_x) && (player_y - ball_dy <= player2_x))
+                        if (player_x - ball_dx <= wall_x)
                         {
-                            ball_dy -= ball_dx;
-                            ball_dx += ball_dy;
+                            ball_dx *= -1;
+                            player_x = wall_x;
                         }
-                        else if ((player_y - ball_dy <= wall_y) && (player_x - ball_dx <= player2_y))
+                        else if (player_y - ball_dy <= wall_y)
                         {
-                            ball_dy += ball_dx;
-                            ball_dx -= ball_dy;
+                            ball_dy *= -1;
+                            player_y = wall_y;
                         }
-                        else if (player_x - ball_dx >= 966)
+                        else if (player_x + player_width >= wall_x + wall_width)
                         {
-                            player_x += ball_dx;
-                            player_y -= ball_dy;
+                            ball_dx *= -1;
+                            player_x = (wall_x + wall_width) - player_width ;
                         }
-                        else if (player_y <= 1000 && Raylib.IsKeyPressed(KeyboardKey.F))
+                        else if (player_y + player_height >= wall_y + wall_height)
                         {
                             Lives = Lives - 1;
                             ball_dx = 3.0f;
@@ -142,7 +142,16 @@ namespace BB_Brick_Breaker
                             player2_y = 930;
                             arrow_x = 475;
                             arrow_y = 960;
+                            fire = false; 
                         }
+                        //else if ()
+                        //{
+
+                        //}
+
+                        //else if ()
+                        //{
+                        //}
 
                     }
 
