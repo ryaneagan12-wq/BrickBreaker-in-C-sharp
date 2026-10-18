@@ -35,8 +35,8 @@ namespace BB_Brick_Breaker
 
             int line_width = 5;
             int line_height = 48;
-            int line_x = 545;
-            int line_y = 860;
+            int line_x = 550;
+            int line_y = 920;
 
             int arrow_width = 149;
             int arrow_height = 103;
@@ -79,7 +79,7 @@ namespace BB_Brick_Breaker
             bool fire = false;
             bool showtext = true;
             bool showline = true;
-
+            float angle = 90;
 
             while (!Raylib.WindowShouldClose()) //needs moar physics here
             {
@@ -158,16 +158,23 @@ namespace BB_Brick_Breaker
                             player_y = player2_y - player_height;
                         }
                     }
-
                     else
                     {
-                        Vector2 mousePos = Raylib.GetMousePosition();
                         if (showline)
                         {
-                            float angle = 180 - (mousePos.X - wall_x) * (180 / wall_width);
+                            Vector2 mousePos = Raylib.GetMousePosition();
+                            angle = 180 - (mousePos.X - wall_x) * (180 / wall_width);
                             ball_dx = (float) Math.Cos(angle * Math.PI / 180) * 3;
                             ball_dx *= -1;
                             ball_dy = (float) Math.Sin(angle * Math.PI / 180) * 3;
+                            if (angle > 180)
+                            {
+                                angle = 180;
+                            }
+                            else if (angle < 0)
+                            {
+                                angle = 0;
+                            }
                         }
                         if (Raylib.IsKeyPressed(KeyboardKey.F))
                         {
@@ -179,7 +186,6 @@ namespace BB_Brick_Breaker
                 Raylib.DrawTexture(Arrows, arrow_x, arrow_y, Color.White);
                 Raylib.DrawTexture(Conveyor, player2_x, player2_y, Color.White);
                 Raylib.DrawTexture(steel_ball, Convert.ToInt32(player_x), Convert.ToInt32(player_y), Color.White);
-                Raylib.DrawTexture(line, line_x, line_y, Color.White);
 
                 if (Raylib.IsKeyPressed(KeyboardKey.F))
                 {
@@ -192,6 +198,10 @@ namespace BB_Brick_Breaker
                     Raylib.DrawText($"Move your cursor left to right to aim at the object at",100, 700, 30,Color.Black);
                 }
 
+                if (showline)
+                {
+                    Raylib.DrawTextureEx(line, new Vector2(line_x, line_y), 270 - angle, 1.0f, Color.White);
+                }
                 if (Raylib.IsMouseButtonPressed(MouseButton.Left)) 
                 { 
                     Console.WriteLine(Raylib.GetMouseX() + ", " + Raylib.GetMouseY()); 
