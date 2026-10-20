@@ -69,7 +69,6 @@ namespace BB_Brick_Breaker
 
             Color Black = new Color(0, 0, 0);
 
-
             int score = 0;
             int HIScore = 0;
             int Lives = 3;
@@ -81,7 +80,23 @@ namespace BB_Brick_Breaker
             bool showline = true;
             float angle = 90;
 
-            while (!Raylib.WindowShouldClose()) //needs moar physics here
+            int Brick_count = 50;
+            int[] Brick_x = new int[Brick_count];
+            int[] Brick_Health = new int[Brick_count]; 
+            int[] Brick_y = new int[Brick_count];
+            int[] Brick_type = new int[Brick_count];
+
+            for (int i = 0; i < Brick_count; i++)
+            {
+                int column = Raylib.GetRandomValue(0, 12);
+                Brick_x[i] = Convert.ToInt32(wall_x) + column * 68;
+                int row = Raylib.GetRandomValue(0, 19);
+                Brick_y[i] = Convert.ToInt32(wall_y) + row * 33;
+                Brick_type[i] = Raylib.GetRandomValue(0, 1);
+                Brick_Health[i] = 100;
+            }
+
+            while (!Raylib.WindowShouldClose()) 
             {
                 Raylib.BeginDrawing();
                 Raylib.ClearBackground(Color.Gray);
@@ -186,6 +201,30 @@ namespace BB_Brick_Breaker
                 Raylib.DrawTexture(Arrows, arrow_x, arrow_y, Color.White);
                 Raylib.DrawTexture(Conveyor, player2_x, player2_y, Color.White);
                 Raylib.DrawTexture(steel_ball, Convert.ToInt32(player_x), Convert.ToInt32(player_y), Color.White);
+
+                for (int i = 0; i < Brick_count; i++)
+                {
+                    if (Brick_type[i] == 0 && Brick_Health[i] == 100)
+                    {
+                        Raylib.DrawTexture(Red_Brick, Brick_x[i], Brick_y[i], Color.White);
+                    }
+                    else if (Brick_type[i] == 0 && Brick_Health[i] == 75)
+                    {
+                        Raylib.DrawTexture(Red_Brick_75, Brick_x[i], Brick_y[i], Color.White);
+                    }
+                    else if (Brick_type[i] == 0 && Brick_Health[i] == 50)
+                    {
+                        Raylib.DrawTexture(Red_Brick_50, Brick_x[i], Brick_y[i], Color.White);
+                    }
+                    else if (Brick_type[i] == 0 && Brick_Health[i] == 25)
+                    {
+                        Raylib.DrawTexture(Red_Brick_25, Brick_x[i], Brick_y[i], Color.White);
+                    }
+                    else if (Brick_type[i] == 1)
+                    {
+                        Raylib.DrawTexture(Iron_Brick, Brick_x[i], Brick_y[i], Color.White);
+                    }
+                }
 
                 if (Raylib.IsKeyPressed(KeyboardKey.F))
                 {
