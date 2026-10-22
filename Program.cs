@@ -1,6 +1,5 @@
-﻿using System;
+﻿using Raylib_cs;
 using System.Numerics;
-using Raylib_cs;
 
 namespace BB_Brick_Breaker
 {
@@ -167,7 +166,7 @@ namespace BB_Brick_Breaker
                             showline = true;
                           }
 
-                        if ((player_x + player_width >= player2_x) && (player_x <= player2_x + player2_width) && (player_y + player_height >= player2_y) && (player_y <= player2_y + player2_height))
+                        if ((player_x + player_width >= player2_x) && (player_x <= player2_x + enemy_width) && (player_y + player_height >= player2_y) && (player_y <= player2_y + player2_height))
                         {
                             ball_dy *= -1;
                             player_y = player2_y - player_height;
@@ -223,6 +222,20 @@ namespace BB_Brick_Breaker
                     else if (Brick_type[i] == 1)
                     {
                         Raylib.DrawTexture(Iron_Brick, Brick_x[i], Brick_y[i], Color.White);
+                    }
+                    if((Brick_type[i] == 0 || Brick_type[i] == 1) && player_x + player_width >= Brick_x[i] && player_y + player_height >= Brick_y[i] && player_x <= Brick_x[i] + enemy_width && player_y <= Brick_y[i] + enemy_height)
+                    {
+                        float overlap_x = Math.Min(player_x + player_width - Brick_x[i], Brick_x[i] + enemy_width - player_x);
+                        float overlap_y = Math.Min(player_y + player_height - Brick_y[i], Brick_y[i] + enemy_height - player_y);
+                        if (overlap_x < overlap_y)
+                        {
+                            ball_dx *= -1;
+                        }
+                        else
+                        {
+                            ball_dy *= -1;
+                        }
+                        Brick_Health[i] = Brick_Health[i] - 25;
                     }
                 }
 
