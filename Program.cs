@@ -79,21 +79,39 @@ namespace BB_Brick_Breaker
             bool showline = true;
             float angle = 90;
 
-            int Brick_count = 50;
+            int Brick_count = 260;
             int[] Brick_x = new int[Brick_count];
             int[] Brick_Health = new int[Brick_count]; 
             int[] Brick_y = new int[Brick_count];
             int[] Brick_type = new int[Brick_count];
 
-            for (int i = 0; i < Brick_count; i++)
+            int i = 0;                                   
+
+            for (int row = 0; row < 20; row++)
             {
-                int column = Raylib.GetRandomValue(0, 12);
-                Brick_x[i] = Convert.ToInt32(wall_x) + column * 68;
-                int row = Raylib.GetRandomValue(0, 19);
-                Brick_y[i] = Convert.ToInt32(wall_y) + row * 33;
-                Brick_type[i] = Raylib.GetRandomValue(0, 1);
-                Brick_Health[i] = 100;
+                for (int column = 0; column < 13; column++)
+                {
+                    int choice = Raylib.GetRandomValue(0, 2);   
+
+                    if (choice == 1)
+                    {
+                        Brick_x[i] = Convert.ToInt32(wall_x) + column * 68;
+                        Brick_y[i] = Convert.ToInt32(wall_y) + row * 33;
+                        Brick_type[i] = 0;
+                        Brick_Health[i] = 100;
+                        i++;
+                    }
+                    else if (choice == 2)
+                    {
+                        Brick_x[i] = Convert.ToInt32(wall_x) + column * 68;
+                        Brick_y[i] = Convert.ToInt32(wall_y) + row * 33;
+                        Brick_type[i] = 1;
+                        Brick_Health[i] = 100;
+                        i++;
+                    }
+                }
             }
+            Brick_count = i;
 
             while (!Raylib.WindowShouldClose()) 
             {
@@ -166,7 +184,7 @@ namespace BB_Brick_Breaker
                             showline = true;
                           }
 
-                        if ((player_x + player_width >= player2_x) && (player_x <= player2_x + enemy_width) && (player_y + player_height >= player2_y) && (player_y <= player2_y + player2_height))
+                        if ((player_x + player_width >= player2_x) && (player_x <= player2_x + player2_width) && (player_y + player_height >= player2_y) && (player_y <= player2_y + player2_height))
                         {
                             ball_dy *= -1;
                             player_y = player2_y - player_height;
@@ -201,43 +219,62 @@ namespace BB_Brick_Breaker
                 Raylib.DrawTexture(Conveyor, player2_x, player2_y, Color.White);
                 Raylib.DrawTexture(steel_ball, Convert.ToInt32(player_x), Convert.ToInt32(player_y), Color.White);
 
-                for (int i = 0; i < Brick_count; i++)
+                for (int x = 0; x < Brick_count; x++)
                 {
-                    if (Brick_type[i] == 0 && Brick_Health[i] == 100)
+                    if (Brick_type[x] == 0 && Brick_Health[x] == 100)
                     {
-                        Raylib.DrawTexture(Red_Brick, Brick_x[i], Brick_y[i], Color.White);
+                        Raylib.DrawTexture(Red_Brick, Brick_x[x], Brick_y[x], Color.White);
                     }
-                    else if (Brick_type[i] == 0 && Brick_Health[i] == 75)
+                    else if (Brick_type[x] == 0 && Brick_Health[x] == 75)
                     {
-                        Raylib.DrawTexture(Red_Brick_75, Brick_x[i], Brick_y[i], Color.White);
+                        Raylib.DrawTexture(Red_Brick_75, Brick_x[x], Brick_y[x], Color.White);
                     }
-                    else if (Brick_type[i] == 0 && Brick_Health[i] == 50)
+                    else if (Brick_type[x] == 0 && Brick_Health[x] == 50)
                     {
-                        Raylib.DrawTexture(Red_Brick_50, Brick_x[i], Brick_y[i], Color.White);
+                        Raylib.DrawTexture(Red_Brick_50, Brick_x[x], Brick_y[x], Color.White);
                     }
-                    else if (Brick_type[i] == 0 && Brick_Health[i] == 25)
+                    else if (Brick_type[x] == 0 && Brick_Health[x] == 25)
                     {
-                        Raylib.DrawTexture(Red_Brick_25, Brick_x[i], Brick_y[i], Color.White);
+                        Raylib.DrawTexture(Red_Brick_25, Brick_x[x], Brick_y[x], Color.White);
                     }
-                    else if (Brick_type[i] == 1)
+                    else if (Brick_type[x] == 1)
                     {
-                        Raylib.DrawTexture(Iron_Brick, Brick_x[i], Brick_y[i], Color.White);
+                        Raylib.DrawTexture(Iron_Brick, Brick_x[x], Brick_y[x], Color.White);
                     }
-                    if((Brick_type[i] == 0 || Brick_type[i] == 1) && player_x + player_width >= Brick_x[i] && player_y + player_height >= Brick_y[i] && player_x <= Brick_x[i] + enemy_width && player_y <= Brick_y[i] + enemy_height)
+                }
+                for (int y = 0; y < Brick_count; y++)
+                {
+                    if ((Brick_type[y] == 0 && Brick_Health[y] != 0 || Brick_type[y] == 1) && player_x + player_width >= Brick_x[y] && player_y + player_height >= Brick_y[y] && player_x <= Brick_x[y] + enemy_width && player_y <= Brick_y[y] + enemy_height)
                     {
-                        float overlap_x = Math.Min(player_x + player_width - Brick_x[i], Brick_x[i] + enemy_width - player_x);
-                        float overlap_y = Math.Min(player_y + player_height - Brick_y[i], Brick_y[i] + enemy_height - player_y);
+                        if (Brick_type[y] == 0)
+                        {
+                            score += 1;
+                        }
+                        float overlap_x = Math.Min(player_x + player_width - Brick_x[y], Brick_x[y] + enemy_width - player_x);
+                        float overlap_y = Math.Min(player_y + player_height - Brick_y[y], Brick_y[y] + enemy_height - player_y);
                         if (overlap_x < overlap_y)
                         {
+                            player_x = Brick_x[y] + enemy_width;
+                            if (ball_dx < 0)
+                            {
+                                player_x = Brick_x[y] - player_width;
+                            }
                             ball_dx *= -1;
                         }
                         else
                         {
+                            player_y = Brick_y[y] - player_height;
+                            if (ball_dy > 0)
+                            {
+                                player_y = Brick_y[y] + enemy_height;
+                            }
                             ball_dy *= -1;
                         }
-                        Brick_Health[i] = Brick_Health[i] - 25;
+                        Brick_Health[y] = Brick_Health[y] - 25;
+                        break;
                     }
                 }
+                
 
                 if (Raylib.IsKeyPressed(KeyboardKey.F))
                 {
@@ -262,7 +299,7 @@ namespace BB_Brick_Breaker
 
                 if (!game_over)
                 {
-                    Raylib.DrawText($"{score:F0}", 1230, 250, 100, Color.White);
+                    Raylib.DrawText($"{score:F0}", 1200, 250, 100, Color.White);
                     Raylib.DrawText($"{Lives:F0}", 1230, 710, 100, Color.White);
                     Raylib.DrawText($"{HIScore:F0}", 1230, 940, 100, Color.White);
                 }
