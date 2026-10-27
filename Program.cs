@@ -154,22 +154,22 @@ namespace BB_Brick_Breaker
                             }
                         }
                         if (player_x - ball_dx <= wall_x)
-                          {
+                        {
                             ball_dx *= -1;
                             player_x = wall_x;
-                          }
+                        }
                         else if (player_y - ball_dy <= wall_y)
-                          {
+                        {
                             ball_dy *= -1;
                             player_y = wall_y;
-                          }
+                        }
                         else if (player_x + player_width >= wall_x + wall_width)
-                          {
+                        {
                             ball_dx *= -1;
                             player_x = (wall_x + wall_width) - player_width;
-                          }
+                        }
                         else if (player_y + player_height >= wall_y + wall_height)
-                          {
+                        {
                             Lives = Lives - 1;
                             ball_dx = 3.0f;
                             ball_dy = 3.0f;
@@ -182,9 +182,9 @@ namespace BB_Brick_Breaker
                             fire = false;
                             showtext = true;
                             showline = true;
-                          }
+                        }
 
-                        if ((player_x + player_width >= player2_x) && (player_x <= player2_x + player2_width) && (player_y + player_height >= player2_y) && (player_y <= player2_y + player2_height))
+                        if ((player_x + player_width >= player2_x) && (player_x <= player2_x + player2_width) && (player_y + player_height >= player2_y) && (player_y <= player2_y + player2_height) && (player_y + player_height <= player2_y + 3))
                         {
                             ball_dy *= -1;
                             player_y = player2_y - player_height;
@@ -211,6 +211,12 @@ namespace BB_Brick_Breaker
                         if (Raylib.IsKeyPressed(KeyboardKey.F))
                         {
                             fire = true; 
+                        }
+                         if (Lives == 0)
+                        {
+                            game_over = true;
+                            showtext = false;
+                            showline = false;
                         }
                     }
                 }
@@ -299,6 +305,13 @@ namespace BB_Brick_Breaker
 
                 if (!game_over)
                 {
+                    Raylib.DrawText($"{score:F0}", 1200, 250, 100, Color.White);
+                    Raylib.DrawText($"{Lives:F0}", 1230, 710, 100, Color.White);
+                    Raylib.DrawText($"{HIScore:F0}", 1230, 940, 100, Color.White);
+                }
+                else if (game_over)
+                {
+                    Raylib.DrawText($"Game Over, You have reached 0 lives", 100, 800, 30, Color.Black);
                     Raylib.DrawText($"{score:F0}", 1200, 250, 100, Color.White);
                     Raylib.DrawText($"{Lives:F0}", 1230, 710, 100, Color.White);
                     Raylib.DrawText($"{HIScore:F0}", 1230, 940, 100, Color.White);
